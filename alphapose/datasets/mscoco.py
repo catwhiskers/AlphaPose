@@ -52,7 +52,7 @@ class Mscoco(CustomDataset):
             dirname, filename = entry['coco_url'].split('/')[-2:]
             abs_path = os.path.join(self._root, dirname, filename)
             if not os.path.exists(abs_path):
-                raise IOError('Image: {} not exists.'.format(abs_path))
+                continue 
             label = self._check_load_keypoints(_coco, entry)
             if not label:
                 continue
