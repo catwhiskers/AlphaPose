@@ -3,7 +3,7 @@ DATASET:
     TYPE: 'Mscoco'
     ROOT: '/opt/ml/input/data/coco/'
     IMG_PREFIX: 'val2017'
-    ANN: 'annotations/person_keypoints_train2017.json'
+    ANN: 'annotations/person_keypoints_val2017.json'
     AUG:
       FLIP: true
       ROT_FACTOR: 40
