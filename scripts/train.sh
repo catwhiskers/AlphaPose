@@ -5,4 +5,5 @@ EXPID=${2:-"alphapose"}
 
 python ./scripts/train.py \
     --exp-id ${EXPID} \
-    --cfg ${CONFIG}
+    --cfg ${CONFIG} \
+    --nThreads 1 

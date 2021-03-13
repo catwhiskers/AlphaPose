@@ -17,6 +17,7 @@ from alphapose.utils.transforms import get_func_heatmap_to_coord
 
 num_gpu = torch.cuda.device_count()
 valid_batch = 1 * num_gpu
+print("num_gpu",num_gpu)
 if opt.sync:
     norm_layer = nn.SyncBatchNorm
 else:
@@ -32,6 +33,7 @@ def train(opt, train_loader, m, criterion, optimizer, writer):
     train_loader = tqdm(train_loader, dynamic_ncols=True)
 
     for i, (inps, labels, label_masks, _, bboxes) in enumerate(train_loader):
+        print("i",i)
         if isinstance(inps, list):
             inps = [inp.cuda().requires_grad_() for inp in inps]
         else:
@@ -84,7 +86,7 @@ def train(opt, train_loader, m, criterion, optimizer, writer):
 def validate(m, opt, heatmap_to_coord, batch_size=20):
     det_dataset = builder.build_dataset(cfg.DATASET.TEST, preset_cfg=cfg.DATA_PRESET, train=False, opt=opt)
     det_loader = torch.utils.data.DataLoader(
-        det_dataset, batch_size=batch_size, shuffle=False, num_workers=20, drop_last=False)
+        det_dataset, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=False)
     kpt_json = []
     eval_joints = det_dataset.EVAL_JOINTS
 
@@ -132,7 +134,7 @@ def validate_gt(m, opt, cfg, heatmap_to_coord, batch_size=20):
     eval_joints = gt_val_dataset.EVAL_JOINTS
 
     gt_val_loader = torch.utils.data.DataLoader(
-        gt_val_dataset, batch_size=batch_size, shuffle=False, num_workers=20, drop_last=False)
+        gt_val_dataset, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=False)
     kpt_json = []
     m.eval()
 
@@ -198,7 +200,8 @@ def main():
 
     train_dataset = builder.build_dataset(cfg.DATASET.TRAIN, preset_cfg=cfg.DATA_PRESET, train=True)
     train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=cfg.TRAIN.BATCH_SIZE * num_gpu, shuffle=True, num_workers=opt.nThreads)
+        train_dataset, batch_size=cfg.TRAIN.BATCH_SIZE * num_gpu, shuffle=True, num_workers=0)
+        #train_dataset, batch_size=cfg.TRAIN.BATCH_SIZE * num_gpu, shuffle=True, num_workers=opt.nThreads)
 
     heatmap_to_coord = get_func_heatmap_to_coord(cfg)
 
@@ -235,7 +238,7 @@ def main():
             # Reset dataset
             train_dataset = builder.build_dataset(cfg.DATASET.TRAIN, preset_cfg=cfg.DATA_PRESET, train=True, dpg=True)
             train_loader = torch.utils.data.DataLoader(
-                train_dataset, batch_size=cfg.TRAIN.BATCH_SIZE * num_gpu, shuffle=True, num_workers=opt.nThreads)
+                train_dataset, batch_size=cfg.TRAIN.BATCH_SIZE * num_gpu, shuffle=True, num_workers=0)
 
     torch.save(m.module.state_dict(), './exp/{}-{}/final_DPG.pth'.format(opt.exp_id, cfg.FILE_NAME))
 
