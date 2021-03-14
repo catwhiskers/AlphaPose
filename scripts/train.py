@@ -222,10 +222,10 @@ def main():
             # Save checkpoint
             torch.save(m.module.state_dict(), './exp/{}-{}/model_{}.pth'.format(opt.exp_id, cfg.FILE_NAME, opt.epoch))
             # Prediction Test
-            with torch.no_grad():
-                gt_AP = validate_gt(m.module, opt, cfg, heatmap_to_coord)
-                rcnn_AP = validate(m.module, opt, heatmap_to_coord)
-                logger.info(f'##### Epoch {opt.epoch} | gt mAP: {gt_AP} | rcnn mAP: {rcnn_AP} #####')
+            #with torch.no_grad():
+            #    gt_AP = validate_gt(m.module, opt, cfg, heatmap_to_coord)
+            #    rcnn_AP = validate(m.module, opt, heatmap_to_coord)
+            #    logger.info(f'##### Epoch {opt.epoch} | gt mAP: {gt_AP} | rcnn mAP: {rcnn_AP} #####')
 
         # Time to add DPG
         if i == cfg.TRAIN.DPG_MILESTONE:

@@ -7,3 +7,5 @@ python ./scripts/train.py \
     --exp-id ${EXPID} \
     --cfg ${CONFIG} \
     --nThreads 1 
+
+cp -r ./exp /opt/ml/model

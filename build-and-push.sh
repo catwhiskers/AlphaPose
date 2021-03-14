@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # The name of our algorithm
-algorithm_name=alphapose
+algorithm_name=alphapose-byos
 
 # get information - account and region, required by ECR https://aws.amazon.com/ecr/
 account=$(aws sts get-caller-identity --query Account --output text)
@@ -32,7 +32,7 @@ $(aws ecr get-login --registry-ids 763104351884 --region ${region} --no-include-
 # get the fullname of deep learning container image 
 base_img='763104351884.dkr.ecr.'$region'.amazonaws.com/pytorch-training:1.6.0-gpu-py36-cu110-ubuntu18.04'
 echo 'base_img:'$base_img
-
+wget -O yolov3-spp.weights https://tinyurl.com/yzaqy5db
 # Build the docker image locally with the image name and then push it to ECR
 # with the full name.
 docker build  -t ${algorithm_name} -f Dockerfile  --build-arg BASE_IMG="${base_img}" .  
