@@ -33,6 +33,7 @@ $(aws ecr get-login --registry-ids 763104351884 --region ${region} --no-include-
 base_img='763104351884.dkr.ecr.'$region'.amazonaws.com/pytorch-training:1.6.0-gpu-py36-cu110-ubuntu18.04'
 echo 'base_img:'$base_img
 wget -O yolov3-spp.weights https://tinyurl.com/yzaqy5db
+wget -O fast_res50_256x192.pth  https://tinyurl.com/yfaenwmx 
 # Build the docker image locally with the image name and then push it to ECR
 # with the full name.
 docker build  -t ${algorithm_name} -f Dockerfile  --build-arg BASE_IMG="${base_img}" .  
