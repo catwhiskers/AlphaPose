@@ -52,14 +52,14 @@ TRAIN:
   WORLD_SIZE: 1
   BATCH_SIZE: 8
   BEGIN_EPOCH: 0
-  END_EPOCH: 200
+  END_EPOCH: 7 
   OPTIMIZER: 'adam'
   LR: 0.001
   LR_FACTOR: 0.1
   LR_STEP:
-  - 90
-  - 120
-  DPG_MILESTONE: 140
+  - 2
+  - 3
+  DPG_MILESTONE: 4
   DPG_STEP:
-  - 160
-  - 190
+  - 5
+  - 6
