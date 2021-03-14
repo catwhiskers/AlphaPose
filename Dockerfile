@@ -13,5 +13,6 @@ RUN git clone https://github.com/catwhiskers/AlphaPose.git  && cd AlphaPose && p
 RUN pip install pycocotools==2.0.2a1; exit 0 
 COPY yolov3-spp.weights /AlphaPose/detector/yolo/data/
 
-WORKDIR /AlphaPose
+#WORKDIR /AlphaPose
+WORKDIR /
 #ENTRYPOINT ["/bin/bash","./scripts/train.sh","./configs/coco/resnet/256x192_res50_lr1e-3_1x.yaml", "exp_fastpose" ]
