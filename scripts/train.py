@@ -1,6 +1,7 @@
 """Script for multi-gpu training."""
 import json
 import os
+import shutil
 
 import numpy as np
 import torch
@@ -15,6 +16,8 @@ from alphapose.utils.logger import board_writing, debug_writing
 from alphapose.utils.metrics import DataLogger, calc_accuracy, calc_integral_accuracy, evaluate_mAP
 from alphapose.utils.transforms import get_func_heatmap_to_coord
 
+
+
 num_gpu = torch.cuda.device_count()
 valid_batch = 1 * num_gpu
 print("num_gpu",num_gpu)
@@ -23,6 +26,15 @@ if opt.sync:
 else:
     norm_layer = nn.BatchNorm2d
 
+def copytree(src, dst, symlinks=False, ignore=None):
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            shutil.copytree(s, d, symlinks, ignore)
+        else:
+            shutil.copy2(s, d)    
+    
 
 def train(opt, train_loader, m, criterion, optimizer, writer):
     loss_logger = DataLogger()
@@ -240,7 +252,7 @@ def main():
                 train_dataset, batch_size=cfg.TRAIN.BATCH_SIZE * num_gpu, shuffle=True, num_workers=0)
 
     torch.save(m.module.state_dict(), './exp/{}-{}/final_DPG.pth'.format(opt.exp_id, cfg.FILE_NAME))
-
+    copytree('./exp', '/opt/ml/model/')
 
 def preset_model(cfg):
     model = builder.build_sppe(cfg.MODEL, preset_cfg=cfg.DATA_PRESET)
